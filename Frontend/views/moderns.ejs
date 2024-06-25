@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadRealm</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.4/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <header class="bg-gray-800 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl">Read Realm</h1>
+            <nav>
+                <a href="usercreate" class="p-2">Register</a>
+                <a href="/" class="p-2">Home</a>
+                <a href="gpdata" class="p-2">Genre/Publisher Data</a>
+                <a href="reviews" class="p-2">Reviews</a>
+                <a href="authorsbooks" class="p-2">Author Search</a>
+                <a href="moderns" class="p-2">Moderns</a>
+            </nav>
+        </div>
+    </header>
+    <section id="search" class="container mx-auto my-4">
+        <h2>Search Books</h2>
+
+            <input type="text" id="yearInput" placeholder="Enter Year" required class="border p-2 w-half">
+            <button class="bg-blue-500 text-white p-2 mt-2" id="loadData">Search</button>
+            <table id="booksData">
+                <thead>
+                    <tr>
+                        <th>Book Title</th>
+                        <th>Average Rating</th>
+                        <th>Author Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+
+    
+        <script>
+        $(document).ready(function() {
+        $('#loadData').click(function() {
+        var year = $('#yearInput').val(); // Get the year from the input
+        
+        $.ajax({
+        url: '/api/searchclassics',
+        type: 'GET',
+        data: { year: year }, // Send the year as a query parameter
+        success: function(data) {
+            var table = $('#booksData tbody');
+            table.empty(); // Clear existing rows
+            data.forEach(function(book) {
+                var row = `<tr>
+                    <td>${book.book_title}</td>
+                    <td>${parseFloat(book.average_rating).toFixed(2)}</td>
+                    <td>${book.author_count}</td>
+                </tr>`;
+                table.append(row);
+            });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error fetching data: ' + textStatus);
+        }
+    });
+});
+});
+
+
+        </script>
+        <br></br>
+        <body>
+    </section>
+    <footer class="bg-gray-800 text-white p-4 text-center">
+        <p>&copy; 2024 Read Realm. All rights reserved.</p>
+    </footer>
+</body>
+</html>

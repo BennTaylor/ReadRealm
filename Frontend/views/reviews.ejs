@@ -1,0 +1,146 @@
+<!-- Index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadRealm</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.4/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <header class="bg-gray-800 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl">Read Realm</h1>
+            <nav>
+                <a href="usercreate" class="p-2">Register</a>
+                <a href="/" class="p-2">Home</a>
+                <a href="gpdata" class="p-2">Genre/Publisher Data</a>
+                <a href="reviews" class="p-2">Reviews</a>
+                <a href="authorsbooks" class="p-2">Author Search</a>
+                <a href="moderns" class="p-2">Moderns</a>
+            </nav>
+        </div>
+    </header>
+    <div class="center-container">
+    <input class="border p-2 w-half" type="text" id="bookTitleInput" placeholder="Enter book title">
+    <button class="bg-blue-500 text-white p-2 mt-2" id="findBookIdButton">Find Book ID</button>
+    <br></div>
+    <textarea id="outputArea" readonly></textarea>
+    </div>
+    <div class="review-form">
+        <textarea class="border p-2 w-half" id="reviewText" placeholder="Write your review here..." required></textarea>
+        <input class="border p-2 w-half" type="text" id="rating" placeholder="Rating (1-5 Stars)" required>
+        <input class="border p-2 w-half" type="text" id="userId" placeholder="Your User ID" required>
+        <input class="border p-2 w-half" type="text" id="bookId" placeholder="Book ID" required>
+        <button class="bg-blue-500 text-white p-2 mt-2" id="submitReview">Submit Review</button>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#submitReview').click(function() {
+                const reviewText = $('#reviewText').val();
+                const rating = $('#rating').val();
+                const userId = $('#userId').val();
+                const bookId = $('#bookId').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/submit_review",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        userId: userId,
+                        rating: rating,
+                        reviewText: reviewText,
+                        bookId: bookId
+                    }),
+                    success: function(response) {
+                        alert('Review submitted successfully!');
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Failed to submit review: ' + xhr.responseJSON.message);
+                    }
+                });
+            });
+        });
+    </script>
+    <br></br>
+    <script>
+        $(document).ready(function() {
+            $('#findBookIdButton').click(function() {
+                var bookTitle = $('#bookTitleInput').val();
+                if (!bookTitle) {
+                    $('#outputArea').val('Please enter a book title.');
+                    return;
+                }
+                $.ajax({
+                    url: '/booktoID',
+                    type: 'GET',
+                    data: { search: bookTitle },
+                    success: function(data) {
+                        if (data.length > 0) {
+                            $('#outputArea').val(`Book ID: ${data[0].book_id}\nTitle: ${data[0].book_title}`);
+                        } else {
+                            $('#outputArea').val('No book found with that title.');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $('#outputArea').val('Failed to fetch data: ' + textStatus);
+                    }
+                });
+            });
+        });
+    </script>
+
+
+</body>
+<br></br>
+<body>
+    <button class="bg-blue-500 text-white p-2 mt-2" id="loadStats">Load User Statistics</button>
+    <table>
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Average Rating</th>
+                <th>Total Reviews</th>
+            </tr>
+        </thead>
+        <tbody id="statsBody"></tbody>
+    </table>
+    <script>
+        $(document).ready(function() {
+            $('#loadStats').click(function() {
+                $.ajax({
+                    url: '/api/leaderboards',
+                    type: 'GET',
+                    success: function(data) {
+                        const tbody = $('#statsBody');
+                        tbody.empty();
+                        data.forEach(function(user) {
+                            const row = `<tr>
+                                <td>${user.user_id}</td>
+                                <td>${user.first_name}</td>
+                                <td>${user.last_name}</td>
+                                <td>${parseFloat(user.average_rating).toFixed(2)}</td>
+                                <td>${user.total_reviews}</td>
+                            </tr>`;
+                            tbody.append(row);
+                        });
+                    },
+                    error: function() {
+                        alert('Failed to fetch data.');
+                    }
+                });
+            });
+        });
+    </script>
+<body>
+</section>
+<footer class="bg-gray-800 text-white p-4 text-center">
+<p>&copy; 2024 Read Realm. All rights reserved.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!-- Index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadRealm</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.4/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <header class="bg-gray-800 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl">Read Realm</h1>
+            <nav>
+                <a href="usercreate" class="p-2">Register</a>
+                <a href="/" class="p-2">Home</a>
+                <a href="gpdata" class="p-2">Genre/Publisher Data</a>
+                <a href="reviews" class="p-2">Reviews</a>
+                <a href="authorsbooks" class="p-2">Author Search</a>
+                <a href="moderns" class="p-2">Moderns</a>
+            </nav>
+        </div>
+    </header>
+
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        form {
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
+            background: #fff;
+            border-radius: 8px;
+        }
+        input[type="text"],
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <form id="registerForm">
+            <input type="text" id="userId" name="userId" placeholder="User ID (Number)" required>
+            <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
+            <input type="text" id="lastName" name="lastName" placeholder="Last Name" required>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#registerForm').submit(function(event) {
+                event.preventDefault();
+                var formData = {
+                    userId: $('#userId').val(),
+                    firstName: $('#firstName').val(),
+                    lastName: $('#lastName').val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/register",
+                    data: JSON.stringify(formData),
+                    contentType: "application/json",
+                    success: function(response) {
+                        alert('User registered successfully!');
+                    },
+                    error: function(xhr, status, error) {
+                        if (xhr.status === 409) {
+                            alert(xhr.responseJSON.message);
+                        } else {
+                            alert('Error registering user. Please try again.');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+<br></br>
+<body>
+</section>
+<footer class="bg-gray-800 text-white p-4 text-center">
+<p>&copy; 2024 Read Realm. All rights reserved.</p>
+</footer>
+</body>
+</html>
