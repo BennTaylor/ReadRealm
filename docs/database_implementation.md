@@ -1,5 +1,5 @@
 ## Logging in:
-![logging_in](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/2bdf1a85-7f02-471c-838e-0ea28ae9284b)
+![logging_in](images/login.jpg)
 
 ## DDL Commands:
 ```
@@ -86,7 +86,7 @@ CREATE TABLE Author_Book (
 ```
 Each tablet contains more than 1000 rows, here are some examples:
 
-![COUNTS](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/ea8e0d9b-1252-4b08-88ec-c7d692ad4130)
+![COUNTS](images/tables.jpg)
 
 ## Advanced Queries
 ### First Query
@@ -110,7 +110,7 @@ HAVING
 ORDER BY
     AVG(R.Stars) DESC;
 ```
-![Q1](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/af254d8f-531c-4295-9917-8afdfa2f807d)
+![Q1](images/q1.jpg)
 We only considered publishers with more than five reviews to get a better result, this caused us to get only 5 rows.
 
 ### Second Query
@@ -144,7 +144,7 @@ ORDER BY
 LIMIT 15;
 
 ```
-![Q2](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/5d4ed5b9-d1fb-4d22-a39e-404993b316be)
+![Q2](images/q2.jpg)
 
 ### Third Query:
 3- This query will calculate the average rating of each book published in or after 2010 along with the total count of authors per book, providing a comprehensive overview of how books perform in terms of ratings and collaborative authorship. It only considers books with more than 3 reviews
@@ -171,7 +171,7 @@ ORDER BY
     author_count DESC
 LIMIT 15;
 ```
-![Q3](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/c5c05510-9e09-44b0-8985-1ebeb333404f)
+![Q3](images/q3.jpg)
 
 ### Fourth Query:
 This query focuses on identifying the top-rated genres based on the average book ratings and also counts how many books fall into each genre
@@ -194,7 +194,7 @@ ORDER BY
     average_rating DESC
 LIMIT 15;
 ```
-![Q4](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/5d43d518-a935-4917-a184-9dd34dc20033)
+![Q4](images/q4.jpg)
 
 ### Fifth Query: 
 Display each user's first name, last name, and their average rating to books, only including users who have submitted at least two reviews.
@@ -226,50 +226,50 @@ ORDER BY
 LIMIT 15;
 ```
 
-![Q5](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/00031d8a-f639-456d-a9c1-89d6a5822339)
+![Q5](images/q5.jpg)
 Looks like Midwest Book Reviews does not have a lot of standards!
 
 #Part 2:
 ### First Query:
 First, we will try to run the code without creating any indexes.
-![Q1_1](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/d280add0-ef82-491c-a69e-1c6746b16ed2)
+![Q1_1](images/ind1_1.jpg)
 It took 1 minute and 41 seconds. I think if we added an index on publisher name it will be faster because we use the name in the filtering
 ```
 CREATE INDEX idx_publisher_name ON Publisher(publisher_name);
 ```
-![Q1_2](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/0739a357-d7d5-4159-b8a1-c2558f2a6870)
+![Q1_2](images/ind1_2.jpg)
 We can see that it became faster by nearly 10 seconds, it only took 1 minute and 32 seconds.
 We will delete this index and try another one and see if we can improve it or not
 The second index is on genre name, I think it might make the query faster since we use the genre name to filter to only include 'Science Fiction'
 ```
 CREATE INDEX idx_genres_name ON Genres(genre_name);
 ```
-![Q1_3](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/bbb2eca3-cabd-4b86-b500-9ffac98ebc79)
+![Q1_3](images/ind1_3.jpg)
 It only took 10.14 seconds! Just as I thought, creating an index on genre name greatly reduces the time; it took 1 minute and 30 seconds less than the original run.
 Now, we will try to run it with the two previous indexes. 
-![Q1_4](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/ba726aa4-2a0c-414e-a578-501dd1194e91)
+![Q1_4](images/ind1_4.jpg)
 As expected, this took the least time, it ran in 9.85 seconds.
 
 Initially, we ran our SQL query without any indexes, and it took 1 minute and 41 seconds to complete. Believing performance could be improved, we added an index on the publisher name since this field is used in the query's filtering criteria. This change reduced the query time by nearly 10 seconds, bringing it down to 1 minute and 32 seconds. To explore further optimization, we removed this index and tested another on the genre name, motivated by our filter that specifically includes only 'Science Fiction'. This adjustment significantly improved performance, cutting the query time to just 10.14 seconds—a reduction of 1 minute and 30 seconds compared to the original run. Encouraged by these results, we then decided to run the query with both the publisher name and genre name indexes simultaneously. As anticipated, this configuration yielded the best performance, completing the query in only 9.85 seconds.
 
 ### Second Query:
 First, we will analyze it without any indexes:
-![Q2_1](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/3faf2b1b-10d0-4a8a-99c0-d46fd4ee988a)
+![Q2_1](images/ind2_1.jpg)
 It took 40.32 seconds.
 Now, we will create an index on book_id in the Reviews table, I think it'll lower the cost because this field is used in the join and it's a foreign key.
 ```
 CREATE INDEX idx_reviews_book_id ON Reviews(book_id);
 ```
-![Q2_2](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/d8661786-bf13-45d3-99a7-28baac7ba403)
+![Q2_2](images/ind2_2.jpg)
 It only took 19.86 seconds, which is half the original time.
 Now, we will delete the index and try to create an index on starts, I think it will improve the cost a little. It is not used in a join, but used in an aggregated variable
 ```
 CREATE INDEX idx_reviews_book_id_stars ON Reviews(Stars);
 ```
-![Q2_3](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/7d960e33-430e-443c-8d00-9794d03cc803)
+![Q2_3](images/ind2_3.jpg)
 Surprisingly, it only took 15.79 seconds, which is better than the original run by nearly 25 seconds.
 Now, we will combine the two indexes and run them together.
-![Q2_4](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/695bb810-dabf-4262-bad0-65433e2801b6)
+![Q2_4](images/ind2_4.jpg)
 It finished running in 17.18 seconds, we can see that some of the costs were lower, and even the number of operations was lower, but there was a huge increase in one of the filter operations' cost
 
 Initially, we executed our SQL query without any indexes, and it took 40.32 seconds to complete. To optimize this, we decided to create an index on book_id in the Reviews table since this field is crucial for join operations and serves as a foreign key. This modification significantly improved the query's performance, reducing the execution time to 19.86 seconds, which is nearly half the original time.
@@ -280,22 +280,22 @@ Finally, we attempted to combine both indexes on book_id and Stars and reran the
 
 ### Third Query:
 First, we will run it without any indexes.
-![Q3_1](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/d4bd30ee-2e33-4868-889b-892c5600bafc)
+![Q3_1](images/ind3_1.jpg)
 It took 5.86 seconds, which is reasonable considering it is a fairly simple and straightforward query. 
 We will create an index on Starts in the reviews table because it is used in an aggregation operation. 
 ```
 CREATE INDEX idx_reviews_stars ON Reviews(Stars);
 ```
-![Q3_2](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/04d2fa16-fcf9-46fd-a91b-4397c1a7146c)
+![Q3_2](images/ind3_2.jpg)
 After the index, it only took 5.16 seconds, which is not much, but it is still a 12% improvement.
 We will now try it with an index on book release date, I think it will slightly increase the performance since it is used in a where clause
 ```
 CREATE INDEX idx_books_date ON Books(release_date);
 ```
-![Q3_3](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/e4b5c38c-3840-4496-8109-0861a10dc431)
+![Q3_3](images/ind3_3.jpg)
 It took 5.82 seconds, which is very similar to the running time without any indexes, it seems like this index does not help much.
 We will try now with both indexes.
-![Q3_4](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/b357f973-24ba-4e1f-93ed-fa872ca73f46)
+![Q3_4](images/ind3_4.jpg)
 Using both indexes actually increased the time, taking an overall 7.88 seconds to execute, I think this is mainly because the sorting took more time. We can see that when using both indexes, a nested loop left join was used, whereas without indexes a left hash was used. The nested loop join preformed better but the sorting took much more time, resulting in the increased time.
 
 Initially, we executed our SQL query without any indexes, and it took 5.86 seconds to complete, which was reasonable given the simplicity of the query. We then decided to improve performance by creating an index on the Stars column in the Reviews table since it is used in an aggregation operation. This modification reduced the execution time to 5.16 seconds, a modest but notable improvement of 12%. 
@@ -304,19 +304,19 @@ Finally, we tested the query with both indexes applied. Surprisingly, this combi
 
 ### Fourth Query:
 Running the query without indexes took 1 minute and 20.92 seconds,
-![Q4_1](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/c28f8579-abd6-44f9-b314-583712395327)
+![Q4_1](images/ind4_1.jpg)
 An index on genre name can enhance the performance of the group by statement.
 ```
 CREATE INDEX idx_genres_genre_id ON Genres(genre_name);
 ```
-![Q4_2](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/9eb46c11-44ef-43cf-ae66-7ade44879b6f)
+![Q4_2](images/ind4_2.jpg)
 The index decreased the time to 1 minute and 15 seconds.
 Next, I tried to create an index on book_id in the reviews table because we used it in the join, but the time took much longer and it did not execute. 
 So I created an index on the stars in the reviews table
-![Q4_3](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/59ee5810-5589-4bd8-b369-2845c804982f)
+![Q4_3](images/ind4_3.jpg)
 The time did not decrease much, I think because there is no disparity in the data.
 Now we will try the indexes together.
-![Q4_4](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/293da1f3-8b25-41d6-9b42-9699b53f39a7)
+![Q4_4](images/ind4_4.jpg)
 Using the indexes together did not affect the cost much, the total runtime was 1 minute and 17 seconds, which means there was nearly no benefit from it
 
 Initially, running the SQL query without any indexes took 1 minute and 20.92 seconds. To improve performance, an index on the genre name was created to enhance the efficiency of the group by statement, which decreased the execution time to 1 minute and 15 seconds. Subsequently, an attempt to create an index on book_id in the reviews table, intended to speed up joins, was unsuccessful as it caused the query not to execute. An alternative approach involved creating an index on the stars column in the reviews table; however, this did not significantly reduce the time, likely due to a lack of disparity in the data. Finally, combining the indexes and running them together resulted in a total runtime of 1 minute and 17 seconds, showing that using the indexes together offered no substantial benefit because of the reasons discussed above.
