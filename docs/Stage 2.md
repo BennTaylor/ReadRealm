@@ -1,6 +1,6 @@
 ## UML Diagram
 
-![Untitled Diagram1 drawio](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/9a921a94-b5a6-4f42-b640-5250738a06d3)
+![UML diagram](https://github.com/cs411-alawini/sp24-cs411-team102-Nameless/assets/55030633/9a921a94-b5a6-4f42-b640-5250738a06d3)
 
 ## Schema
 Users(user_id: INT NOT NULL [PK], first_name: VARCHAR(250) NOT NULL, last_name: VARCHAR(250), email: VARCHAR(250)) \
